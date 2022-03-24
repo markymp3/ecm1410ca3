@@ -279,21 +279,22 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 		
 	}
 	public int[] getStageSegments(int stageId) throws IDNotRecognisedException {
+		public int[] getStageSegments(int stageId) throws IDNotRecognisedException {
 		/*
 		 * returns array of stage segments
 		 */
 		
-		int [] raceIds = new int[raceArray.size()];
-		for(int a = 0; a<raceArray.size(); a++) {
+		int [] segIds = new int[segmentArray.size()];
+		for(int a = 0; a<segmentArray.size(); a++) {
 			// if there are no races available print a message saying so
-			if(raceArray.size() == 0) {
+			if(segmentArray.size() == 0) {
 				System.out.print("No raceIds");
 				return null;
 			}
 			// populate the race array with ids for each race
-			raceIds[a] = raceArray.get(a).getRaceId();
+			segIds[a] = segmentArray.get(a).getSegmentId();
 		}
-		return raceIds;
+		return segIds;
 	}
 
 	@Override
