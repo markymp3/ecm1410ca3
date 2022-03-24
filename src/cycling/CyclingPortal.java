@@ -346,11 +346,52 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 		return segIds;
 	}
 
-	@Override
+	
 	public void registerRiderResultsInStage(int stageId, int riderId, LocalTime... checkpoints)
 			throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException,
 			InvalidStageStateException {
-		// TODO Auto-generated method stub
+		Stage stage = this.getStage(stageId);
+
+        if (stage == null)
+        {
+            throw new IDNotRecognisedException("Stage ID doesn't exist.");
+        }
+        else
+        {
+            if (stage.getRiderResults().containsKey(riderId))
+            {
+                throw new DuplicatedResultException("This stage result has already been registered");
+            }
+
+            LocalTime t_prev = checkpoints[0];
+            for (LocalTime t : checkpoints)
+            {
+                if (t.isAfter(t_prev) || t.equals(t_prev))
+                {
+                    t_prev = t;
+                    continue;
+                }
+                else
+                {
+                    throw new InvalidCheckpointsException("Invalid result: Checkpoint times are not consecutive");
+                }
+            }
+
+            if (checkpoints.length != this.getStageSegments(stageId).length)
+            {
+                throw new InvalidCheckpointsException("Invalid result: too many checkpoints have been included");
+            }
+
+            if (stage.getState() == StageState.PREPARING)
+            {
+               
+                throw new InvalidStageStateException("Stage isn't ready for results");
+            }
+
+            stage.addRiderResult(riderId, checkpoints);
+        }
+
+	}
 		
 	}
 
