@@ -172,6 +172,55 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 			}
 		}
 	}
+	
+	public int createTeam(String name, String description) throws IllegalNameException, InvalidNameException {
+	
+	if (name.length() >= 30) {
+		throw new InvalidNameException("Team name is too long");
+	} if (name.isEmpty()) {
+		throw new InvalidNameException("Team name is empty");
+	} if (name.trim().isEmpty()) {
+		throw new InvalidNameException("Team name is empty");
+	}  if (name.contains(" ")) {
+		throw new InvalidNameException("Team name contains a white space");
+	} 
+	//if (teamArrayList.contains()) {
+	//	throw new IllegalNameException();
+	//} 
+	Team team = new Team(name, description);
+	teamArrayList.add(team);
+	return team.getTeamId();
+}
+
+public void removeTeam(int teamId) throws IDNotRecognisedException {
+	for(int i = 0; i < teamArrayList.size(); i++) {
+		if(teamArrayList.get(i).getTeamId() == teamId){
+			teamArrayList.remove(i);
+			if(i == teamArrayList.size()){
+				throw new IDNotRecognisedException("Team ID doesn't exist.");
+			}
+		}
+	}
+}
+
+public int[] getTeams() {
+	int j = teamArrayList.size();
+	int[] teamIdsArray = new int[j];
+	for (int i=0;i<teamArrayList.size();i++) {
+		teamIdsArray[i] = teamArrayList.get(i).getTeamId();
+	}				
+	return teamIdsArray;
+}
+
+public int[] getTeamRiders(int teamId) throws IDNotRecognisedException {
+	int j = teamArrayList.size();
+	int[] teamIdsArray = new int[j];
+	for (int i=0;i<teamArrayList.size();i++) {
+		teamIdsArray[i] = teamArrayList.get(i).getTeamId();
+	}				
+	return teamIdsArray;
+}
+
 	public void registerRiderResultsInStage(int stageId, int riderId, LocalDateTime checkpoints) throws IDNotRecognisedException, DuplicatedResultException, InvalidCheckpointsException, InvalidStageStateException{
 		for(int a = 0; a < riderArray.size(); a++) {
 			Rider riders = riderArray.get(a);
