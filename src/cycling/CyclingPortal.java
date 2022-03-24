@@ -11,10 +11,12 @@ import java.util.ArrayList;
  */
 public class CyclingPortal implements Serializable, CyclingPortalInterface {
 
-	protected ArrayList<Rider> riderArray = new ArrayList<>();
-	protected ArrayList<Stage> stageArray = new ArrayList<>();
-	protected ArrayList<Race> raceArray = new ArrayList<>();
-	protected ArrayList<Race> teamArray = new ArrayList<>();
+	ArrayList<Rider> riderArray = new ArrayList<>();
+	ArrayList<Stage> stageArray = new ArrayList<>();
+	ArrayList<Race> raceArray = new ArrayList<>();
+	ArrayList<Race> teamArray = new ArrayList<>();
+	ArrayList<Segment> segmentArray = new ArrayList<>();
+
 
 	
 	public int [] getRaceIDs() {
