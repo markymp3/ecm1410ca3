@@ -395,10 +395,41 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 		
 	}
 
-	@Override
 	public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Stage stage = this.getStage(stageId);
+        Rider rider = this.getRider(riderId);
+
+        if (stage != null)
+        {
+            if (rider != null)
+            {
+                HashMap<Integer, ArrayList<LocalTime>> riderResults = stage.getRiderResults();
+                ArrayList<LocalTime> results = riderResults.get(riderId);
+                LocalTime[] resultsArray = new LocalTime[results.size()];
+                for (int i=0; i<resultsArray.length; i++)
+                {
+                    resultsArray[i] = results.get(i);
+                }
+
+                LocalTime finishingTime = resultsArray[resultsArray.length - 1];
+
+                for (ArrayList<LocalTime> riderResult : riderResults.values())
+                {
+                    LocalTime comparedFinishingTime = riderResult.get(riderResult.size()-1);
+                    if (finishingTime.isAfter(comparedFinishingTime))
+                    {
+                        finishingTime = comparedFinishingTime;
+                    }
+                }
+
+                return finishingTime;
+            }
+            throw new IDNotRecognisedException("Rider ID doesn't exist.");
+        }
+        throw new IDNotRecognisedException("Stage ID doesn't exist.");
+	}
+
+		
 	}
 
 	@Override
