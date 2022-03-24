@@ -112,8 +112,8 @@ public class CyclingPortal implements Serializable, CyclingPortalInterface {
 			throw new InvalidLengthException("Length is less than 5km");
 		}
 		Stage stage = new Stage(raceId, stageName, description, length, startTime, type);
-		Race.addStage(stage);
-		return getStageId();
+		stageArray.add(stage);
+		return stage.getStageID();
 	}
 		
 	public int[] getRaceStages(int raceId) throws IDNotRecognisedException{
