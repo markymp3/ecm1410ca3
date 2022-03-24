@@ -15,7 +15,22 @@ public interface CyclingPortal {
 	ArrayList<race> raceArray = new ArrayList<>();
 	ArrayList<race> teamArray = new ArrayList<>();
 
-	
+	public default int [] getRaceIDs() {
+		/*
+		 * returns array of race ids
+		 */
+		
+		int [] raceIds = new int[raceArray.size()];
+		for(int a = 0; a<raceArray.size(); a++) {
+			// if there are no races available print a message saying so
+			if(raceArray.size() == 0) {
+				System.out.print("No raceIds");
+				return null;
+			}
+			// populate the race array with ids for each race
+			raceIds[a] = raceArray.get(a).getRaceId();
+		}
+		return raceIds;
 	
 	public default int createRace(String name, String description) throws IllegalNameException, InvalidNameException{
 		
@@ -23,7 +38,7 @@ public interface CyclingPortal {
 		 Then checks to see if given handle is within the guidelines
 		 If it passes those two checks then account is created with a unique id*/
 		for(int a = 0; a < raceArray.size(); a++) {
-			if(raceArray.get(a).getRaceName()==name) {
+			if(raceArray.get(a).getName()==name) {
 				throw new IllegalNameException("name already taken");	
 			}
 			}
@@ -32,35 +47,12 @@ public interface CyclingPortal {
 				throw new InvalidNameException("Name cannot have more than 30 characters, be null or contain white spaces");
 			}
 		}
-		/*
-		 * race races = new race(name, description);
-			raceArray.add(races);
-			return races.getRaceId();
-		 */
-		
+		// create the race 
+		Race newRace = new Race(name, description);
+		raceArray.add(newRace);
+		return newRace.getRaceId();		
 	}
-	
-	
-	
-	
-	public default int getRaceIDs() {
-		/*
-		 * returns array of race ids
-		 */
-		for(int a = 0; a<raceArray.size(); a++) {
-			return raceArray.get(a);
-		}
-	}
-	public default String viewRaceDetais(int raceId) throws IDNotRecognisedException{
-		String raceDetails = null;
-		for(int a = 0; a < raceArray.size(); a++) {
-			if (raceArray.get(a).getRaceId() == raceId) {
-				raceDetails = a;
-				return raceDetails;
-			}
-		}
-	}
-		
+
 				
 					
 				
@@ -151,9 +143,9 @@ public default void createRider(int teamID, String name, int yearOfBirth) throws
 		return rider.getRiderID();
 		
 	}
-	public default void removeRider(int riderID) throws IDNotRecognisedException {
+public default void removeRider(int riderID) throws IDNotRecognisedException {
 		for(int a = 0; a < riderArray.size(); a++) {
-			rider riders = riderArray.get(a);
+			Rider riders = riderArray.get(a);
 			if(riders.getRiderID() == riderID){
 				riderArray.remove(riders);
 			}
