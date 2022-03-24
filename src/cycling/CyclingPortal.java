@@ -132,15 +132,15 @@ public interface CyclingPortal {
 		}
 	}
 	
-public default void createRider(int teamID, String name, int yearOfBirth) throws IDNotRecognisedException, IllegalArgumentException{
+public default int createRider(int teamID, String name, int yearOfBirth) throws IDNotRecognisedException, IllegalArgumentException{
 		
 		if(name == null) {
 			throw new IllegalArgumentException("Name cannot be null");}
 		if(yearOfBirth < 1900) {
 			throw new IllegalArgumentexception("Year of birth cannot be before 1900");}
-		rider Rider = new rider(name, yearOfBirth);
-		getTeamById(teamID).addRider(Rider);
-		return rider.getRiderID();
+		Rider newRider = new Rider(teamID, name, yearOfBirth);
+		riderArray.add(newRider);
+		return newRider.getRiderID();
 		
 	}
 public default void removeRider(int riderID) throws IDNotRecognisedException {
