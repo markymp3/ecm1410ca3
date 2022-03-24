@@ -181,6 +181,42 @@ public default void removeRider(int riderID) throws IDNotRecognisedException {
 	}
 	}
 		
+	public default void eraseCyclingPortal() {
+		/*
+		 * erases the platform by clearing all the arrays
+		 */
+		riderArray.clear();
+		stageArray.clear();
+		raceArray.clear();
+		teamArray.clear();
+	}
+	
+	public default void saveCyclingPortal(String filename) throws IOException {
+		
+		for(int a = 0; a < riderArray.size(); a++) {
+			FileOutputStream fileOutput = new FileOutputStream(filename + "rider.ser");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+            output.writeObject(riderArray.get(a));
+		}
+		for(int a = 0; a < stageArray.size(); a++) {
+			FileOutputStream fileOutput = new FileOutputStream(filename + "stage.ser");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+            output.writeObject(stageArray.get(a));
+		}
+		for(int a = 0; a < raceArray.size(); a++) {
+			FileOutputStream fileOutput = new FileOutputStream(filename + "race.ser");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+            output.writeObject(raceArray.get(a));
+		}
+		for(int a = 0; a < teamArray.size(); a++) {
+			FileOutputStream fileOutput = new FileOutputStream(filename + "team.ser");
+			ObjectOutputStream output = new ObjectOutputStream(fileOutput);
+            output.writeObject(teamArray.get(a));
+		}
+	}
+}
+	
+		
 	
 	
 }
