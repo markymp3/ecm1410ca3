@@ -573,8 +573,72 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 
 	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Stage stage = this.getStage(stageId);
+
+        if (stage == null)
+        {
+            throw new IDNotRecognisedException("Stage ID doesn't exist.");
+        }
+        else
+        {
+            int[] ranking = this.getRidersRankInStage(stageId);
+            int[] points = new int[ranking.length];
+
+            HashMap<Integer, ArrayList<LocalTime>> riderResults = stage.getRiderResults();
+            int[] segments = this.getStageSegments(stageId);
+            for (int i=0; i < segments.length; i++)
+            {
+                Segment segment = this.getSegment(segments[i]);
+                if (segment != null)
+                {
+                    // Checkpoint Time
+                    HashMap<Integer, LocalTime> riderSegmentFinishes = new HashMap<Integer, LocalTime>();
+
+                    // Populate with finishing times
+                    for (int key : riderResults.keySet())
+                    {
+                        ArrayList<LocalTime> riderCheckpoints = riderResults.get(key);
+                        riderSegmentFinishes.put(key, riderCheckpoints.get(i));
+                    }
+
+                    // Make an ArrayList with finish times
+                    ArrayList<LocalTime> sortedSegmentFinishes = new ArrayList<LocalTime>(riderSegmentFinishes.values());
+                    Collections.sort(sortedSegmentFinishes);
+
+                    // Create a variable to track the position in the array
+                    int[] sortedRiders = new int[sortedSegmentFinishes.size()];
+                    int sortedRidersIndex = 0;
+
+                    // Iterate over sorted finish times
+                    for (LocalTime finish : sortedSegmentFinishes)
+                    {
+                        // Iterate a second time, over the key set of riderResults
+                        for (int key : riderResults.keySet())
+                        {
+                            int index = this.intLinearSearch(ranking, key);
+                            // Check if the rider has the same time as the sorted time
+                            if (finish.equals(riderResults.get(key).get(i)) && sortedRidersIndex < sortedRiders.length && index != -1)
+                            {
+                                // Add the correct number of points to the "index"th term of ranking
+                                try {
+                                    points[index] += segmentPointsMap.get(segment.getType())[sortedRidersIndex];
+                                    sortedRidersIndex++;
+                                }
+                                catch (IndexOutOfBoundsException e)
+                                {
+                                    // Number of points = 0, by default
+                                    sortedRidersIndex++;
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+            return points;
+        }
+	}
 	}
 
 	@Override
