@@ -432,7 +432,6 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 		
 	}
 
-	@Override
 	public void deleteRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
 		 Stage stage = this.getStage(stageId);
         Rider rider = this.getRider(riderId);
@@ -454,7 +453,6 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 		
 	}
 
-	@Override
 	public int[] getRidersRankInStage(int stageId) throws IDNotRecognisedException {
 		Stage stage = this.getStage(stageId);
 
@@ -504,16 +502,73 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 
 	}
 
-	@Override
+
 	public LocalTime[] getRankedAdjustedElapsedTimesInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Stage stage = this.getStage(stageId);
+        if (stage != null)
+        {
+            // Finish Time
+            HashMap<Integer, ArrayList<LocalTime>> riderResults = stage.getRiderResults();
+            HashMap<Integer, LocalTime> riderFinishes = new HashMap<Integer, LocalTime>();
+
+            // Populate with finishing times
+            for (int key : riderResults.keySet())
+            {
+                ArrayList<LocalTime> riderCheckpoints = riderResults.get(key);
+                riderFinishes.put(key, riderCheckpoints.get(riderCheckpoints.size()-1));
+            }
+
+            // Get adjusted elapsed times
+            HashMap<Integer, LocalTime> adjustedRiderFinishes = new HashMap<Integer, LocalTime>();
+
+            for (int riderId : riderFinishes.keySet())
+            {
+                adjustedRiderFinishes.put(riderId, this.getRiderAdjustedElapsedTimeInStage(stageId, riderId));
+            }
+
+            // Make an ArrayList with finish times
+            ArrayList<LocalTime> sortedAdjustedFinishes = new ArrayList<LocalTime>(adjustedRiderFinishes.values());
+            Collections.sort(sortedAdjustedFinishes);
+
+            LocalTime[] sortedAdjustedFinishesArray = new LocalTime[sortedAdjustedFinishes.size()];
+            for (int i=0; i<sortedAdjustedFinishesArray.length; i++)
+            {
+                sortedAdjustedFinishesArray[i] = sortedAdjustedFinishes.get(i);
+            }
+            return sortedAdjustedFinishesArray;
+        }
+        throw new IDNotRecognisedException("Stage ID doesn't exist.");
+	}
 	}
 
-	@Override
 	public int[] getRidersPointsInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		 Stage stage = this.getStage(stageId);
+
+        if (stage == null)
+        {
+            throw new IDNotRecognisedException("Stage ID doesn't exist.");
+        }
+        else
+        {
+            int[] ranking = this.getRidersRankInStage(stageId);
+            int[] points = new int[ranking.length];
+            for (int i=0; i < ranking.length; i++)
+            {
+                // Set points value to finish points
+                try {
+                    int mapValue = stagePointsMap.get(stage.getType())[i];
+                    points[i] = mapValue;
+                }
+                catch (ArrayIndexOutOfBoundsException e)
+                {
+                    // The array found from stagePointsMap.get(stage.getType()) returned null;
+                    // point scored is 0
+                    points[i] = 0;
+                }
+            }
+            return points;
+        }
+	}
 	}
 
 	@Override
