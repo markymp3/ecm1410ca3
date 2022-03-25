@@ -19,6 +19,41 @@ public class CyclingPortal implements Serializable, CyclingPortalInterface {
 
 
 	
+	public Stage getStage(int stageId)
+    {
+        // Finds the corresponding stage and returns it if it exists.
+        // If it doesn't exist, null is returned.
+
+        Stage stage = null;
+        for (int i=0; i<this.stages.size(); i++)
+        {
+            if (this.stages.get(i).getId() == stageId)
+            {
+                stage = this.stages.get(i);
+                break;
+            }
+        }
+
+        return stage;
+    }
+	
+	public Rider getRider(int riderId)
+    {
+        // Finds the corresponding rider and returns it if it exists.
+        // If it doesn't exist, null is returned.
+
+        Rider rider = null;
+        for (int i=0; i<this.riders.size(); i++)
+        {
+            if (this.riders.get(i).getId() == riderId)
+            {
+                rider = this.riders.get(i);
+                break;
+            }
+        }
+
+        return rider;
+    }
 	public int [] getRaceIDs() {
 		/*
 		 * Creates a new race which is added to the raceArray,
