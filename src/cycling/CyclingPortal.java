@@ -569,7 +569,6 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
             return points;
         }
 	}
-	}
 
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
 		Stage stage = this.getStage(stageId);
@@ -638,11 +637,48 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
             return points;
         }
 	}
-	}
 
-	@Override
 	public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
+		this.eraseCyclingPortal(); // Loading assumes current state is not preserved.
+
+        FileInputStream f = new FileInputStream(outdir + "\\" + filename);
+        ObjectInputStream o = new ObjectInputStream(f);
+        try
+        {
+            // While there are > 0 bytes to be read from file...
+            Object obj = o.readObject();
+            if (obj instanceof CyclingPortal)
+            {
+                CyclingPortal portal = (CyclingPortal)obj;
+                for (Race race : portal.races)
+                {
+                    this.races.add(race);
+                }
+                for (Stage stage : portal.stages)
+                {
+                    this.stages.add(stage);
+                }
+                for (Segment segment : portal.segments)
+                {
+                    this.segments.add(segment);
+                }
+                for (Team team : portal.teams)
+                {
+                    this.teams.add(team);
+                }
+                for (Rider rider : portal.riders)
+                {
+                    this.riders.add(rider);
+                }
+            }
+
+            o.close();
+        }
+        catch (EOFException e)
+        {
+            // End of file
+            o.close();
+        }
 		
 	}
 
