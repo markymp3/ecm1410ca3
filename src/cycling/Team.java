@@ -6,11 +6,13 @@ public class Team implements Serializable{
 	
 	String teamName;
 	String teamDescription;
+	int teamId;
 	
 	
-	public Team(String name, String description) {
-		teamName = name;
-		teamDescription = description;
+	public Team(String name, String description, int teamId ) {
+		this.teamName = name;
+		this.teamDescription = description;
+		this.teamId = teamId;
 		
 	}
 	
@@ -25,6 +27,13 @@ public class Team implements Serializable{
 		return teamDescription;
 	}
 	
+	//team id
+	public int getTeamID() {
+		return teamId;
+	}
 	
-	
+	// Prints all the rider information in a single string
+		public String toString() {
+			return this.teamName + "," + this.teamId + "," + this.teamDescription;
+		}
 }
