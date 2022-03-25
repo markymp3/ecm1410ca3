@@ -571,7 +571,6 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 	}
 	}
 
-	@Override
 	public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
 		Stage stage = this.getStage(stageId);
 
