@@ -434,14 +434,74 @@ public int createRider(int teamID, String name, int yearOfBirth) throws IDNotRec
 
 	@Override
 	public void deleteRiderResultsInStage(int stageId, int riderId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
+		 Stage stage = this.getStage(stageId);
+        Rider rider = this.getRider(riderId);
+
+        if (stage != null)
+        {
+            if (rider != null)
+            {
+                HashMap<Integer, ArrayList<LocalTime>> riderResults = stage.getRiderResults();
+                riderResults.remove(riderId);
+                stage.setRiderResults(riderResults);
+                return;
+            }
+            throw new IDNotRecognisedException("This Rider ID does not exist.");
+        }
+        throw new IDNotRecognisedException("This Stage ID does not exist.");
+	}
+
 		
 	}
 
 	@Override
 	public int[] getRidersRankInStage(int stageId) throws IDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		Stage stage = this.getStage(stageId);
+
+        if (stage != null)
+        {
+            HashMap<Integer, ArrayList<LocalTime>> riderResults = stage.getRiderResults();
+            if (riderResults.keySet().size() > 0)
+            {
+                HashMap<Integer, LocalTime> riderFinishes = new HashMap<Integer, LocalTime>();
+                // Populate with finish times
+                for (int key : riderResults.keySet())
+                {
+                    ArrayList<LocalTime> riderCheckpoints = riderResults.get(key);
+                    riderFinishes.put(key, riderCheckpoints.get(riderCheckpoints.size()-1));
+                }
+
+                // Make an ArrayList with all finish times
+                ArrayList<LocalTime> sortedFinishes = new ArrayList<LocalTime>(riderFinishes.values());
+                Collections.sort(sortedFinishes);
+
+                int[] sortedRiders = new int[sortedFinishes.size()];
+                int sortedRidersIndex = 0;
+
+                for (LocalTime finish : sortedFinishes)
+                {
+
+                    for (int key : riderResults.keySet())
+                    {
+                        // Check if the rider has the same time as the sorted time
+                        if (finish.equals(riderResults.get(key).get(riderResults.size()-1)) && sortedRidersIndex < sortedRiders.length)
+                        {
+                            // Assign the rider ID (key) to the correct index
+                            sortedRiders[sortedRidersIndex] = key;
+                            sortedRidersIndex++;
+                        }
+                    }
+                }
+
+                // Return the sorted array of rider IDs.
+                return sortedRiders;
+            }
+            return new int[0];
+        }
+        // Stage is null; invalid.
+        throw new IDNotRecognisedException("Stage ID doesn't exist.");
+	}
+
 	}
 
 	@Override
